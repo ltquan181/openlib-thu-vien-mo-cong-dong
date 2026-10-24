@@ -13,6 +13,7 @@ import {
   BookOpen,
   FileText
 } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export default function OpenReaderModal({ book, isOpen, onClose }) {
   const [theme, setTheme] = useState('sepia'); // 'light' | 'sepia' | 'dark'
@@ -202,7 +203,7 @@ export default function OpenReaderModal({ book, isOpen, onClose }) {
         {viewMode === 'pdf' && isPdf ? (
           <div className="flex-1 w-full h-full bg-slate-900 p-2 sm:p-4 flex flex-col">
             <iframe
-              src={book.fileDataUrl || book.fileUrl}
+              src={getAssetUrl(book.fileDataUrl || book.fileUrl)}
               className="w-full flex-1 rounded-xl border border-white/10 bg-white"
               title={book.title}
             />

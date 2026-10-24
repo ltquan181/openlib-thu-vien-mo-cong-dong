@@ -3,6 +3,7 @@ import { Download, Heart, Eye, Lock, MessageSquare } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { storageService } from '../../services/storageService';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export default function PinCard({ pin, onOpenDetail, onQuickDownload, onLike }) {
   const { currentUser, openAuth } = useAuth();
@@ -49,7 +50,7 @@ export default function PinCard({ pin, onOpenDetail, onQuickDownload, onLike }) 
       <div className="w-full overflow-hidden bg-slate-950 flex items-center justify-center">
         {pin.imageUrl ? (
           <img
-            src={pin.imageUrl}
+            src={getAssetUrl(pin.imageUrl)}
             alt={pin.title}
             loading="lazy"
             className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-[1.02]"

@@ -8,6 +8,7 @@ import {
   Star
 } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { getAssetUrl } from '../../utils/assetHelper';
 
 export default function BookCard({ book, onOpenDetail, onQuickRead, isMyBook = false }) {
   const { theme } = useTheme();
@@ -34,7 +35,7 @@ export default function BookCard({ book, onOpenDetail, onQuickRead, isMyBook = f
         {/* Real Cover Image or Fallback */}
         {book.coverImage && !imgError ? (
           <img
-            src={book.coverImage}
+            src={getAssetUrl(book.coverImage)}
             alt={book.title}
             onError={() => setImgError(true)}
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"

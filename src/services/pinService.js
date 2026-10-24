@@ -1,5 +1,6 @@
 import { storageService } from './storageService';
 import { pointService } from './pointService';
+import { getAssetUrl } from '../utils/assetHelper';
 
 export const pinService = {
   getPins() {
@@ -68,7 +69,7 @@ export const pinService = {
     return pins[pIndex];
   },
 
-  triggerDownload(pin) {
+  async triggerDownload(pin) {
     try {
       const ext = (pin.format || 'jpg').toLowerCase();
       const sanitizedTitle = (pin.title.replace(/[^a-zA-Z0-9_\u00C0-\u024F\u1EA0-\u1EF9]/g, '_') || 'openlib_art').slice(0, 50);
@@ -101,9 +102,31 @@ export const pinService = {
           URL.revokeObjectURL(url);
           return;
         } else {
-          // Remote web URL
+          // Resolve relative URL (including GitHub Pages base path)
+          const resolvedUrl = getAssetUrl(pin.imageUrl);
+
+          // Force real binary file download using fetch Blob
+          try {
+            const resp = await fetch(resolvedUrl);
+            if (resp.ok) {
+              const blob = await resp.blob();
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = filename;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              setTimeout(() => URL.revokeObjectURL(url), 1000);
+              return;
+            }
+          } catch (fetchErr) {
+            console.warn('Fetch blob download failed, falling back to direct link:', fetchErr);
+          }
+
+          // Fallback direct link
           const link = document.createElement('a');
-          link.href = pin.imageUrl;
+          link.href = resolvedUrl;
           link.download = filename;
           link.target = '_blank';
           document.body.appendChild(link);

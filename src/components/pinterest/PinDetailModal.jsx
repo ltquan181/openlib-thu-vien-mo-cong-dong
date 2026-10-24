@@ -13,6 +13,7 @@ import {
   Send,
   Sparkles
 } from 'lucide-react';
+import { getAssetUrl } from '../../utils/assetHelper';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { pinService } from '../../services/pinService';
@@ -135,7 +136,7 @@ export default function PinDetailModal({ pin, isOpen, onClose, onPinUpdated }) {
         <div className="md:w-7/12 bg-slate-950 p-4 sm:p-6 flex items-center justify-center relative overflow-hidden group">
           {pin.imageUrl ? (
             <img
-              src={pin.imageUrl}
+              src={getAssetUrl(pin.imageUrl)}
               alt={pin.title}
               className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl transition-transform duration-300 group-hover:scale-[1.01]"
             />

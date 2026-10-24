@@ -22,6 +22,7 @@ import { bookService } from '../../services/bookService';
 import { commentService } from '../../services/commentService';
 import { storageService } from '../../services/storageService';
 import { useToast } from '../../context/ToastContext';
+import { getAssetUrl } from '../../utils/assetHelper';
 import confetti from 'canvas-confetti';
 
 export default function BookDetailModal({ book, isOpen, onClose, onReadOnline, onBookUpdated }) {
@@ -238,7 +239,7 @@ export default function BookDetailModal({ book, isOpen, onClose, onReadOnline, o
                 <div className="w-full aspect-[2/3] rounded-2xl overflow-hidden shadow-xl book-spine-effect mb-4 bg-slate-900 flex items-center justify-center">
                   {book.coverImage ? (
                     <img 
-                      src={book.coverImage} 
+                      src={getAssetUrl(book.coverImage)} 
                       alt={book.title} 
                       className="w-full h-full object-cover object-center" 
                     />
