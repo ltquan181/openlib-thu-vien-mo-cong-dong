@@ -163,12 +163,14 @@ export default function Navbar({ activeRoute, onNavigate, onOpenBookDetail, onOp
           <button 
             onClick={(e) => {
               e.preventDefault();
+              try { localStorage.removeItem('openlib_community_tab'); } catch {}
               if (window.location.hash !== '#/community') {
                 window.location.hash = '#/community';
               }
+              window.scrollTo({ top: 0, behavior: 'instant' });
               window.location.reload();
             }}
-            title="OpenLib - Về trang chủ & Làm mới trang (F5)"
+            title="OpenLib - Về giao diện banner trang chủ & Làm mới trang (F5)"
             className="flex items-center gap-3 transition-transform hover:scale-[1.02] text-left group cursor-pointer"
           >
             {/* Logo Icon Mèo Chồng Sách */}

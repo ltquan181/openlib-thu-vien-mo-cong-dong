@@ -31,14 +31,26 @@ export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPin
   const [activeMainTab, setActiveMainTab] = useState(() => {
     const hash = window.location.hash || '';
     if (hash.includes('tab=pins') || hash === '#/pins') return 'pins';
-    return localStorage.getItem('openlib_community_tab') || 'books';
+    if (hash.includes('tab=books') || hash === '#/books') return 'books';
+    return localStorage.getItem('openlib_community_tab') || null;
   });
 
   const handleTabChange = (tab) => {
-    setActiveMainTab(tab);
-    try {
-      localStorage.setItem('openlib_community_tab', tab);
-    } catch {}
+    const nextTab = activeMainTab === tab ? null : tab;
+    setActiveMainTab(nextTab);
+    if (nextTab) {
+      try {
+        localStorage.setItem('openlib_community_tab', nextTab);
+      } catch {}
+      setTimeout(() => {
+        const el = document.getElementById('community-content-start');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+    } else {
+      try {
+        localStorage.removeItem('openlib_community_tab');
+      } catch {}
+    }
   };
 
   useEffect(() => {
@@ -50,6 +62,11 @@ export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPin
       } else if (hash.includes('tab=books') || hash === '#/books') {
         setActiveMainTab('books');
         try { localStorage.setItem('openlib_community_tab', 'books'); } catch {}
+      } else if (hash === '#/community' || hash === '' || hash === '#') {
+        const saved = localStorage.getItem('openlib_community_tab');
+        if (!saved) {
+          setActiveMainTab(null);
+        }
       }
     };
     handleHash();
@@ -235,19 +252,19 @@ export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPin
       <main id="community-content-start" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         
         {/* 2 Main Centered Large Tabs (Kho sách cộng đồng vs Kho ảnh cộng đồng) */}
-        <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 pt-2 pb-6">
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-6 pt-2 pb-6">
           <button
             onClick={() => handleTabChange('books')}
-            className={`flex items-center gap-3 px-6 py-3.5 sm:px-10 sm:py-4 rounded-3xl text-sm sm:text-base font-extrabold transition-all duration-200 shadow-md active:scale-95 ${
+            className={`flex items-center gap-3 px-6 py-4 sm:px-10 sm:py-4 rounded-3xl text-sm sm:text-base font-extrabold transition-all duration-200 shadow-md active:scale-95 cursor-pointer ${
               activeMainTab === 'books'
-                ? 'bg-emerald-600 text-white shadow-emerald-600/25 ring-2 ring-emerald-400 scale-105'
-                : 'bg-white/90 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 opacity-75 hover:opacity-100 hover:scale-[1.02]'
+                ? 'bg-emerald-600 text-white shadow-emerald-600/30 ring-4 ring-emerald-400/50 scale-105'
+                : 'bg-white/95 dark:bg-slate-800 border-2 border-emerald-500/40 text-slate-800 dark:text-slate-100 hover:border-emerald-600 hover:shadow-lg hover:scale-105'
             }`}
           >
-            <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-300" />
+            <BookOpen className={`w-5 h-5 sm:w-6 sm:h-6 ${activeMainTab === 'books' ? 'text-emerald-200' : 'text-emerald-600 dark:text-emerald-400'}`} />
             <span>Kho sách cộng đồng</span>
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold ${
-              activeMainTab === 'books' ? 'bg-emerald-950/60 text-emerald-100' : 'bg-black/10 dark:bg-white/10'
+              activeMainTab === 'books' ? 'bg-emerald-950/60 text-emerald-100' : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'
             }`}>
               {communityBooks.length}
             </span>
@@ -255,21 +272,36 @@ export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPin
 
           <button
             onClick={() => handleTabChange('pins')}
-            className={`flex items-center gap-3 px-6 py-3.5 sm:px-10 sm:py-4 rounded-3xl text-sm sm:text-base font-extrabold transition-all duration-200 shadow-md active:scale-95 ${
+            className={`flex items-center gap-3 px-6 py-4 sm:px-10 sm:py-4 rounded-3xl text-sm sm:text-base font-extrabold transition-all duration-200 shadow-md active:scale-95 cursor-pointer ${
               activeMainTab === 'pins'
-                ? 'bg-amber-500 text-slate-950 shadow-amber-500/25 ring-2 ring-amber-400 scale-105'
-                : 'bg-white/90 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 opacity-75 hover:opacity-100 hover:scale-[1.02]'
+                ? 'bg-amber-500 text-slate-950 shadow-amber-500/30 ring-4 ring-amber-400/50 scale-105'
+                : 'bg-white/95 dark:bg-slate-800 border-2 border-amber-500/40 text-slate-800 dark:text-slate-100 hover:border-amber-500 hover:shadow-lg hover:scale-105'
             }`}
           >
-            <ImageIcon className="w-5 h-5 sm:w-6 sm:h-6 text-slate-950" />
+            <ImageIcon className={`w-5 h-5 sm:w-6 sm:h-6 ${activeMainTab === 'pins' ? 'text-slate-950' : 'text-amber-500'}`} />
             <span>Kho ảnh cộng đồng</span>
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-bold ${
-              activeMainTab === 'pins' ? 'bg-amber-600/40 text-slate-950' : 'bg-black/10 dark:bg-white/10'
+              activeMainTab === 'pins' ? 'bg-amber-600/40 text-slate-950' : 'bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300'
             }`}>
               {allPins.length}
             </span>
           </button>
         </div>
+
+        {/* Khi chưa bấm vào kho nào: Chỉ hiển thị 2 nút Kho sách & Kho ảnh + Lời mời khám phá */}
+        {!activeMainTab && (
+          <div className="py-16 sm:py-20 text-center max-w-xl mx-auto px-4">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-3xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-md">
+              <Layers className="w-8 h-8" />
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black font-serif mb-2.5 text-slate-800 dark:text-slate-100">
+              Chào mừng bạn đến với Thư viện Mở OpenLib
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+              Vui lòng bấm chọn <strong>Kho sách cộng đồng</strong> để đọc sách online & mượn/đổi sách, hoặc <strong>Kho ảnh cộng đồng</strong> để chiêm ngưỡng và tải tranh ảnh minh họa.
+            </p>
+          </div>
+        )}
 
         {/* ========================================================================= */}
         {/* TAB 1: KHO SÁCH CỘNG ĐỒNG CONTROLS */}

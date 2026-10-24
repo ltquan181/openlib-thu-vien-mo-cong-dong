@@ -44,10 +44,19 @@ export function AuthProvider({ children }) {
     }
 
     storageService.saveCurrentUser(user);
-    try { localStorage.setItem('openlib_user_authenticated', 'true'); } catch {}
+    try { 
+      localStorage.setItem('openlib_user_authenticated', 'true'); 
+      localStorage.removeItem('openlib_community_tab');
+    } catch {}
     setCurrentUser(user);
     showToast(`Chào mừng ${user.displayName || user.username} đã quay trở lại!`, 'success');
     setIsAuthModalOpen(false);
+    // Tự động làm mới quay về giao diện banner trang chủ
+    setTimeout(() => {
+      window.location.hash = '#/community';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      window.location.reload();
+    }, 200);
     return user;
   };
 
@@ -102,7 +111,10 @@ export function AuthProvider({ children }) {
     pointService.addPoints(newUser.id, 100, 'register', 'Thưởng gia nhập cộng đồng OpenLib');
 
     storageService.saveCurrentUser(newUser);
-    try { localStorage.setItem('openlib_user_authenticated', 'true'); } catch {}
+    try { 
+      localStorage.setItem('openlib_user_authenticated', 'true'); 
+      localStorage.removeItem('openlib_community_tab');
+    } catch {}
     setCurrentUser(newUser);
 
     try {
@@ -111,6 +123,12 @@ export function AuthProvider({ children }) {
 
     showToast('Đăng ký thành công! Bạn nhận ngay 100 điểm thưởng 🎉', 'success');
     setIsAuthModalOpen(false);
+    // Tự động làm mới quay về giao diện banner trang chủ
+    setTimeout(() => {
+      window.location.hash = '#/community';
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      window.location.reload();
+    }, 200);
     return newUser;
   };
 
@@ -189,13 +207,17 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
-    try { localStorage.removeItem('openlib_user_authenticated'); } catch {}
+    try { 
+      localStorage.removeItem('openlib_user_authenticated'); 
+      localStorage.removeItem('openlib_community_tab');
+    } catch {}
     storageService.saveCurrentUser(null);
     setCurrentUser(null);
     showToast('Đã đăng xuất tài khoản.', 'info');
-    // Tự động làm mới lại trang web khi đăng xuất và quay về trang chủ
+    // Tự động làm mới lại trang web khi đăng xuất và quay về giao diện banner trang chủ
     setTimeout(() => {
       window.location.hash = '#/community';
+      window.scrollTo({ top: 0, behavior: 'instant' });
       window.location.reload();
     }, 150);
   };

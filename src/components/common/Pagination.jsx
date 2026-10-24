@@ -67,12 +67,7 @@ export default function Pagination({
   const navBtnBase = "flex items-center justify-center h-9 sm:h-10 px-2 sm:px-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all duration-150 disabled:opacity-30 disabled:pointer-events-none active:scale-95 shadow-xs";
 
   return (
-    <div className="mt-10 sm:mt-12 pt-6 pb-2 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-      {/* Thông tin số lượng hiển thị */}
-      <div className="text-xs sm:text-sm opacity-75 font-medium">
-        Hiển thị <span className="font-bold font-mono text-slate-900 dark:text-white">{startItem} - {endItem}</span> trên tổng số <span className="font-bold font-mono text-slate-900 dark:text-white">{totalItems}</span> {itemLabel}
-      </div>
-
+    <div className="mt-10 sm:mt-12 pt-6 pb-2 border-t border-black/10 dark:border-white/10 flex items-center justify-center">
       {/* Dãy nút chuyển trang */}
       <nav aria-label="Phân trang" className="flex items-center gap-1.5 sm:gap-2">
         {/* Nút về Trang Đầu */}
