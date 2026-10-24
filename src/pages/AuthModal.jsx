@@ -8,8 +8,8 @@ export default function AuthModal() {
   const { showToast } = useToast();
 
   // Login form state
-  const [loginTerm, setLoginTerm] = useState('lethanhquan');
-  const [loginPassword, setLoginPassword] = useState('123456');
+  const [loginTerm, setLoginTerm] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
 
   // Register form state
   const [regUsername, setRegUsername] = useState('');
@@ -150,7 +150,17 @@ export default function AuthModal() {
               {/* Demo Hint */}
               <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-[11px] text-amber-900 flex items-center justify-between">
                 <span>Tài khoản Demo thử nghiệm:</span>
-                <span className="font-mono font-bold text-amber-800">lethanhquan / 123456</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setLoginTerm('lethanhquan');
+                    setLoginPassword('123456');
+                  }}
+                  className="font-mono font-bold text-emerald-800 underline hover:text-emerald-950 transition-colors cursor-pointer"
+                  title="Nhấp để tự động điền thông tin"
+                >
+                  lethanhquan / 123456
+                </button>
               </div>
             </form>
           )}

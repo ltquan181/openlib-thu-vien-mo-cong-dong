@@ -223,8 +223,10 @@ export const storageService = {
       if (!localStorage.getItem(KEYS.POINTS_HISTORY)) {
         localStorage.setItem(KEYS.POINTS_HISTORY, JSON.stringify(INITIAL_POINTS_HISTORY));
       }
-      if (!localStorage.getItem(KEYS.CURRENT_USER)) {
-        localStorage.setItem(KEYS.CURRENT_USER, JSON.stringify(INITIAL_USERS[0]));
+
+      // Guest mode by default: Do not automatically force-login into demo account
+      if (!localStorage.getItem('openlib_user_authenticated')) {
+        localStorage.removeItem(KEYS.CURRENT_USER);
       }
 
       // Asynchronous background sync with MySQL 8.0 Database

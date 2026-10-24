@@ -161,8 +161,15 @@ export default function Navbar({ activeRoute, onNavigate, onOpenBookDetail, onOp
         {/* Left: Big Main Logo (OpenLib THƯ VIỆN MỞ CỘNG ĐỒNG) */}
         <div className="flex items-center shrink-0">
           <button 
-            onClick={() => onNavigate('#/community')}
-            className="flex items-center gap-3 transition-transform hover:scale-[1.02] text-left group"
+            onClick={(e) => {
+              e.preventDefault();
+              if (window.location.hash !== '#/community') {
+                window.location.hash = '#/community';
+              }
+              window.location.reload();
+            }}
+            title="OpenLib - Về trang chủ & Làm mới trang (F5)"
+            className="flex items-center gap-3 transition-transform hover:scale-[1.02] text-left group cursor-pointer"
           >
             {/* Logo Icon Mèo Chồng Sách */}
             <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-emerald-500/15 via-emerald-400/10 to-amber-500/15 border border-emerald-500/30 flex items-center justify-center shadow-md shadow-emerald-700/10 group-hover:shadow-emerald-700/25 group-hover:scale-105 transition-all shrink-0 p-1">

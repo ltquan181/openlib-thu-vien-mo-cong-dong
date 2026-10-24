@@ -44,6 +44,7 @@ export function AuthProvider({ children }) {
     }
 
     storageService.saveCurrentUser(user);
+    try { localStorage.setItem('openlib_user_authenticated', 'true'); } catch {}
     setCurrentUser(user);
     showToast(`Chào mừng ${user.displayName || user.username} đã quay trở lại!`, 'success');
     setIsAuthModalOpen(false);
@@ -101,6 +102,7 @@ export function AuthProvider({ children }) {
     pointService.addPoints(newUser.id, 100, 'register', 'Thưởng gia nhập cộng đồng OpenLib');
 
     storageService.saveCurrentUser(newUser);
+    try { localStorage.setItem('openlib_user_authenticated', 'true'); } catch {}
     setCurrentUser(newUser);
 
     try {
@@ -187,9 +189,15 @@ export function AuthProvider({ children }) {
   };
 
   const logout = () => {
+    try { localStorage.removeItem('openlib_user_authenticated'); } catch {}
     storageService.saveCurrentUser(null);
     setCurrentUser(null);
     showToast('Đã đăng xuất tài khoản.', 'info');
+    // Tự động làm mới lại trang web khi đăng xuất và quay về trang chủ
+    setTimeout(() => {
+      window.location.hash = '#/community';
+      window.location.reload();
+    }, 150);
   };
 
   const openAuth = (tab = 'login') => {

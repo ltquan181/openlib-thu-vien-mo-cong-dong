@@ -24,11 +24,38 @@ import MasonryGrid from '../components/pinterest/MasonryGrid';
 import Pagination from '../components/common/Pagination';
 import { BOOK_CATEGORIES, BOOK_FORMATS, PIN_CATEGORIES, PIN_FORMATS } from '../data/categories';
 
-export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPinDetail, onQuickDownload, onLikePin }) {
+export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPinDetail, onQuickDownload, onLikePin, dataVersion }) {
   const { currentUser } = useAuth();
   const { theme } = useTheme();
 
-  const [activeMainTab, setActiveMainTab] = useState('books'); // 'books' | 'pins'
+  const [activeMainTab, setActiveMainTab] = useState(() => {
+    const hash = window.location.hash || '';
+    if (hash.includes('tab=pins') || hash === '#/pins') return 'pins';
+    return localStorage.getItem('openlib_community_tab') || 'books';
+  });
+
+  const handleTabChange = (tab) => {
+    setActiveMainTab(tab);
+    try {
+      localStorage.setItem('openlib_community_tab', tab);
+    } catch {}
+  };
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash || '';
+      if (hash.includes('tab=pins') || hash === '#/pins') {
+        setActiveMainTab('pins');
+        try { localStorage.setItem('openlib_community_tab', 'pins'); } catch {}
+      } else if (hash.includes('tab=books') || hash === '#/books') {
+        setActiveMainTab('books');
+        try { localStorage.setItem('openlib_community_tab', 'books'); } catch {}
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   // Books filters & sort
   const [bookTypeFilter, setBookTypeFilter] = useState('all'); // 'all' | 'exchange' | 'borrow'
@@ -210,7 +237,7 @@ export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPin
         {/* 2 Main Centered Large Tabs (Kho sách cộng đồng vs Kho ảnh cộng đồng) */}
         <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 pt-2 pb-6">
           <button
-            onClick={() => setActiveMainTab('books')}
+            onClick={() => handleTabChange('books')}
             className={`flex items-center gap-3 px-6 py-3.5 sm:px-10 sm:py-4 rounded-3xl text-sm sm:text-base font-extrabold transition-all duration-200 shadow-md active:scale-95 ${
               activeMainTab === 'books'
                 ? 'bg-emerald-600 text-white shadow-emerald-600/25 ring-2 ring-emerald-400 scale-105'
@@ -227,7 +254,7 @@ export default function CommunityPage({ onOpenBookDetail, onQuickRead, onOpenPin
           </button>
 
           <button
-            onClick={() => setActiveMainTab('pins')}
+            onClick={() => handleTabChange('pins')}
             className={`flex items-center gap-3 px-6 py-3.5 sm:px-10 sm:py-4 rounded-3xl text-sm sm:text-base font-extrabold transition-all duration-200 shadow-md active:scale-95 ${
               activeMainTab === 'pins'
                 ? 'bg-amber-500 text-slate-950 shadow-amber-500/25 ring-2 ring-amber-400 scale-105'

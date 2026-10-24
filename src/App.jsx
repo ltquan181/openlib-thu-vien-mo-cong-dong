@@ -183,9 +183,10 @@ export default function App() {
       />
 
       {/* Main Routed Page Content */}
-      <div className="flex-1" key={dataVersion}>
-        {currentRoute === '#/community' && (
+      <div className="flex-1">
+        {(currentRoute === '#/community' || currentRoute.startsWith('#/community') || currentRoute === '#/pins' || currentRoute === '#/books') && (
           <CommunityPage
+            dataVersion={dataVersion}
             onOpenBookDetail={handleOpenBookDetail}
             onQuickRead={handleQuickRead}
             onOpenPinDetail={handleOpenPinDetail}
@@ -196,6 +197,7 @@ export default function App() {
 
         {(currentRoute.startsWith('#/my-library') || currentRoute.startsWith('#/my-books') || currentRoute.startsWith('#/my-pins') || currentRoute === '#/my') && (
           <MyLibraryPage
+            dataVersion={dataVersion}
             initialTab={currentRoute.startsWith('#/my-pins') ? 'pins' : 'books'}
             onOpenBookDetail={handleOpenBookDetail}
             onQuickRead={handleQuickRead}
@@ -209,17 +211,18 @@ export default function App() {
 
         {currentRoute.startsWith('#/transactions') && (
           <TransactionsPage
+            dataVersion={dataVersion}
             onOpenBookDetail={handleOpenBookDetail}
             onQuickRead={handleQuickRead}
           />
         )}
 
         {currentRoute === '#/points' && (
-          <PointsPage />
+          <PointsPage dataVersion={dataVersion} />
         )}
 
         {currentRoute === '#/profile' && (
-          <ProfilePage />
+          <ProfilePage dataVersion={dataVersion} />
         )}
       </div>
 

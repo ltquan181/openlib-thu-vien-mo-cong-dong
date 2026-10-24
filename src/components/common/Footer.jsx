@@ -66,7 +66,7 @@ export default function Footer({ onNavigate }) {
               </li>
               <li>
                 <button 
-                  onClick={() => onNavigate('#/community')}
+                  onClick={() => onNavigate('#/community?tab=pins')}
                   className="hover:text-white transition-colors flex items-center gap-1.5 group"
                 >
                   <ChevronRight className="w-3 h-3 text-emerald-400/50 group-hover:text-emerald-300 transition-colors" />
