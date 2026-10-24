@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans transition-colors duration-200;
+  }
+
+  /* Fix low contrast fonts in dark mode */
+  .dark body,
+  .dark {
+    color-scheme: dark;
+    color: #E2E8F0;
+    background-color: #0B0F19;
+  }
+
+  .dark p,
+  .dark span {
+    color: inherit;
+  }
+
+  .dark .text-slate-500,
+  .dark .text-slate-600 {
+    color: #94A3B8 !important;
+  }
+
+  .dark .text-slate-700,
+  .dark .text-slate-800 {
+    color: #CBD5E1 !important;
+  }
+
+  .dark .text-slate-900 {
+    color: #F8FAFC !important;
+  }
+
+  .dark .bg-slate-50,
+  .dark .bg-slate-100 {
+    background-color: #151C2C !important;
+  }
+
+  .dark .border-slate-100,
+  .dark .border-slate-200 {
+    border-color: #1E293B !important;
+  }
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+.theme-sepia ::-webkit-scrollbar-track {
+  background: #EFE5CE;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #4B9B5C;
+  border-radius: 4px;
+}
+
+.theme-sepia ::-webkit-scrollbar-thumb {
+  background: #C4B18F;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #39814A;
+}
+
+.theme-sepia ::-webkit-scrollbar-thumb:hover {
+  background: #A9936D;
+}
+
+/* Pinterest Masonry layout utilities */
+.masonry-grid {
+  column-gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 768px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  .masonry-grid {
+    column-count: 4;
+  }
+}
+
+@media (min-width: 1280px) {
+  .masonry-grid {
+    column-count: 5;
+  }
+}
+
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 1.25rem;
+}
+
+/* 3D Book spine shadow effect */
+.book-spine-effect {
+  position: relative;
+}
+
+.book-spine-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(to right, rgba(0,0,0,0.25) 0%, rgba(255,255,255,0.15) 30%, rgba(0,0,0,0.15) 100%);
+  z-index: 10;
+  pointer-events: none;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+/* Keyframes for Banner Motion */
+@keyframes slowZoom {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.animate-slow-zoom {
+  animation: slowZoom 20s ease-in-out infinite;
+}
